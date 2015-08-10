@@ -10,8 +10,7 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-
-includeme
+	includeme
 
 
 Indices and tables
