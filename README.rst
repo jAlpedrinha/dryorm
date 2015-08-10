@@ -67,6 +67,7 @@ It's not supposed to be swiss army knife, but to simplify small tasks.
 
 License
 --------
+
 The BSD 2 License
 =====================
 Copyright (c) 2015, Jorge Alpedrinha Ramos
