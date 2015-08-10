@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='DRY-orm',
-    version='0.0.01',
+    version='0.0.2',
     author='Jorge Alpedrinha Ramos',
     author_email='jalpedrinharamos@gmail.com',
     packages=find_packages(),
@@ -11,7 +11,6 @@ setup(
     description='DRY is inspired by Django-ORM',
     long_description=open('README.rst').read(),
     install_requires=[
-        'psycopg2',
-        'sqlite3'
+        'psycopg2'
     ],
 )
