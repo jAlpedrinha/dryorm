@@ -70,6 +70,7 @@ License
 
 The BSD 2 License
 =================
+
 Copyright (c) 2015, Jorge Alpedrinha Ramos
 All rights reserved.
 
