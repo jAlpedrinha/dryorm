@@ -9,8 +9,8 @@ Welcome to Dry ORM's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
-	includeme
+    :maxdepth: 2
+    includeme
 
 
 Indices and tables
