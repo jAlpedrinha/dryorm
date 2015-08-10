@@ -11,5 +11,7 @@ setup(
     description='DRY is inspired by Django-ORM',
     long_description=open('README.rst').read(),
     install_requires=[
+        'psycopg2',
+        'sqlite3'
     ],
 )
