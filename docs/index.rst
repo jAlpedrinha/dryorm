@@ -12,7 +12,7 @@ Contents:
     :maxdepth: 2
     includeme
 
-
+.. include:: ../README.txt
 Indices and tables
 ==================
 
