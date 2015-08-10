@@ -9,43 +9,103 @@ class Mixin(object):
 	def connection(self):
 		raise NotImplementedError()
 
+	@classmethod
+	def adjust_params(cls,params):
+		return cls._adjust_params(params)
+	
+	@staticmethod
+	def _adjust_params(params):
+		return params
+
 	def save(self):
-		raise NotImplementedError()
+		if not self.is_dirty():
+			return 
+		query = 'Update {} set {} where id = ' + self._param_placeholder
+		setstr = ','.join(['{} = {}'.format(field, self._param_placeholder) for field in self.is_dirty()])
+		query = query.format(self.table, setstr)
+		params = [getattr(self, field) for field in self.is_dirty()]
+		params.append(self.id)
+		self.exec_and_commit(query,params)
+		self.clean()
 	
 	def exec_and_commit(self,query,params):
-		raise NotImplementedError()
+		return Mixin._exec_and_commit(self.connection, query, params)
 
 	@classmethod
 	def sexec_and_commit(cls,query,params):
-		raise NotImplementedError()
+		return Mixin._exec_and_commit(cls.connect(), query, params)
 
 	@staticmethod
 	def _exec_and_commit(connection, query, params):
-		raise NotImplementedError()
+		cursor = connection.cursor()
+		cursor.execute(query,Mixin.adjust_params(params))
+		cursor.close()
+		connection.commit()
 
 	@classmethod
 	def sinsert(cls,query,params):
-		raise NotImplementedError()
+		return Mixin._insert(cls.connect(), query, params)
 
 	@staticmethod
 	def _insert(connection, query, params):
-		raise NotImplementedError()
+		cursor = connection.cursor()
+		cursor.execute(query,Mixin.adjust_params(params))
+		rowid = cursor.lastrowid
+		cursor.close()
+		connection.commit()
+		return rowid
 
 	def fetch_one(self,query,params):
-		raise NotImplementedError()
+		return Mixin._get_one(self.connection, query, params)
 
 	@classmethod
 	def sfetch_one(cls,query,params):
-		raise NotImplementedError()
+		return Mixin._get_one(cls.connect(), query, params)
 
 	@staticmethod
 	def _get_one(connection, query, params):
-		raise NotImplementedError()
-
+		cursor = connection.cursor()
+		cursor.execute(query,Mixin.adjust_params(params))
+		row = cursor.fetchone()
+		if row:
+			cursor.close()
+			return row
+		else:
+			return None
+	
+	def fetch_all(self,query,params):
+		return SqliteMixin._get_all(self.connection, query, params)
+		
 	@classmethod
 	def sfetch_all(cls,query,params=[]):
-		raise NotImplementedError()
+		return SqliteMixin._get_all(cls.connect(), query, params)
 
 	@staticmethod
 	def _get_all(connection, query, params):
-		raise NotImplementedError()
+		cursor = connection.cursor()
+		cursor.execute(query,Mixin.adjust_params(params))
+		rows = cursor.fetchall()
+		if rows:
+			cursor.close()
+			return rows
+		else:
+			return None
+
+	@classmethod
+	def create(cls,*args, **kwargs):
+		query = """
+			INSERT INTO {} ({})
+			VALUES ({})"""
+
+		if not args and not kwargs:
+			print "No args"
+			raise Exception("No args")
+		if not kwargs:
+			query = query.format(cls.table, ",".join(cls.fields), ",".join(cls._param_placeholder*len(cls.fields)))
+			my_args = list(args)
+		else:
+			query = query.format(cls.table, ",".join(kwargs.keys()), ",".join(cls._param_placeholder*len(kwargs.keys())))
+			my_args = list(kwargs.values())
+		print query, my_args
+		id = cls.sinsert(query,my_args)
+		return cls.get_by_id(id)

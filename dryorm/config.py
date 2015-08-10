@@ -1,1 +1,0 @@
-from psql import PsqlConfigs as Configs
