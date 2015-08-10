@@ -51,7 +51,7 @@ Soon...
 Documentation
 =============
 
-Gently hosted by `ReadTheDocs <http://www.readthedocs.org/>`_ @ `docs <http://dryorm.readthedocs`.org/en/latest`
+Gently hosted by `ReadTheDocs <http://www.readthedocs.org/>`_ @ `docs <http://dryorm.readthedocs`_.org/en/latest`
 
 
 About DRY-ORM
