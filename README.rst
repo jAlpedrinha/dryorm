@@ -66,10 +66,10 @@ It's not supposed to be swiss army knife, but to simplify small tasks.
 
 
 License
--------
+=======
 
-The BSD 2 License
-=================
+The BSD 3-Clause License
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Copyright (c) 2015, Jorge Alpedrinha Ramos
 All rights reserved.
