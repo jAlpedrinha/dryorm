@@ -17,6 +17,13 @@ class Mixin(object):
 	def _adjust_params(params):
 		return params
 
+	def delete(self):
+		if self._pk:
+			'Delete from {} where {} = {}'.format(self.table, self._pk, self._param_placeholder)
+			self.exec_and_commit(query, [getattr(self, self._pk)])
+		else:
+			raise NotImplementedError('Still cant delete without _pk defined')
+
 	def save(self):
 		if not self.is_dirty():
 			return 
@@ -74,11 +81,11 @@ class Mixin(object):
 			return None
 	
 	def fetch_all(self,query,params):
-		return SqliteMixin._get_all(self.connection, query, params)
+		return Mixin._get_all(self.connection, query, params)
 		
 	@classmethod
 	def sfetch_all(cls,query,params=[]):
-		return SqliteMixin._get_all(cls.connect(), query, params)
+		return Mixin._get_all(cls.connect(), query, params)
 
 	@staticmethod
 	def _get_all(connection, query, params):
@@ -101,10 +108,10 @@ class Mixin(object):
 			print "No args"
 			raise Exception("No args")
 		if not kwargs:
-			query = query.format(cls.table, ",".join(cls.fields), ",".join(cls._param_placeholder*len(cls.fields)))
+			query = query.format(cls.table, ",".join(cls.fields), ",".join([cls._param_placeholder]*len(cls.fields)))
 			my_args = list(args)
 		else:
-			query = query.format(cls.table, ",".join(kwargs.keys()), ",".join(cls._param_placeholder*len(kwargs.keys())))
+			query = query.format(cls.table, ",".join(kwargs.keys()), ",".join([cls._param_placeholder]*len(kwargs.keys())))
 			my_args = list(kwargs.values())
 		print query, my_args
 		id = cls.sinsert(query,my_args)

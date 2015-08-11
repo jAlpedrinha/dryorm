@@ -10,7 +10,6 @@ Contents:
 
 .. toctree::
     :maxdepth: 2
-    includeme
 
 .. include:: ../README.rst
 Indices and tables

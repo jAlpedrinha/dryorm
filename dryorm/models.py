@@ -25,9 +25,3 @@ class BaseModel(object):
 	def get_by_id(cls, id):
 		raise NotImplementedError()
 
-	def delete(self):
-		raise NotImplementedError()
-
-	@classmethod
-	def get_by_id(cls, id):
-		raise NotImplementedError()
