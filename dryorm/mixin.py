@@ -1,6 +1,7 @@
 
 class Mixin(object):
 	_connection = None	
+	_pk = 'id'
 	@staticmethod
 	def connect():
 		raise NotImplementedError()
