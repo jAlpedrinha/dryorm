@@ -27,13 +27,17 @@ class Mixin(object):
 	def save(self):
 		if not self.is_dirty():
 			return 
-		query = 'Update {} set {} where id = ' + self._param_placeholder
-		setstr = ','.join(['{} = {}'.format(field, self._param_placeholder) for field in self.is_dirty()])
-		query = query.format(self.table, setstr)
-		params = [getattr(self, field) for field in self.is_dirty()]
-		params.append(self.id)
-		self.exec_and_commit(query,params)
-		self.clean()
+
+		if self._pk:
+			query = 'Update {} set {} where {} = ' + self._param_placeholder
+			setstr = ','.join(['{} = {}'.format(field, self._param_placeholder) for field in self.is_dirty()])
+			query = query.format(self.table, setstr, self._pk)
+			params = [getattr(self, field) for field in self.is_dirty()]
+			params.append(self.id)
+			self.exec_and_commit(query,params)
+			self.clean()
+		else:
+			raise NotImplementedError('Still cant save without _pk defined')
 	
 	def exec_and_commit(self,query,params):
 		return Mixin._exec_and_commit(self.connection, query, params)
