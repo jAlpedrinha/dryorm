@@ -34,7 +34,7 @@ class Mixin(object):
 			setstr = ','.join(['{} = {}'.format(field, self._param_placeholder) for field in self.is_dirty()])
 			query = query.format(self.table, setstr, self._pk)
 			params = [getattr(self, field) for field in self.is_dirty()]
-			params.append(self.id)
+			params.append(getattr(self, self._pk))
 			self.exec_and_commit(query,params)
 			self.clean()
 		else:
