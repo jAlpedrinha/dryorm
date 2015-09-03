@@ -1,8 +1,4 @@
 from settings import settings
-print settings
-
-print 'db' in settings
-
 
 db = settings['db']
 
