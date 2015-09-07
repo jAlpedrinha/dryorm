@@ -23,5 +23,11 @@ class BaseModel(object):
 
 	@classmethod
 	def get_by_id(cls, id):
-		raise NotImplementedError()
+		if self._pk:
+			'SELECT *  from {} where {} = {}'.format(self.table, self._pk, self._param_placeholder)
+			row = self.sfetch_one(query, [getattr(self, self._pk)])
+			return cls(*row)
+		else:
+			raise NotImplementedError('Still cant get_by_id without _pk defined')
+
 

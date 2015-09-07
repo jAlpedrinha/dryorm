@@ -28,7 +28,6 @@ class Mixin(object):
 	def save(self):
 		if not self.is_dirty():
 			return 
-
 		if self._pk:
 			query = 'Update {} set {} where {} = ' + self._param_placeholder
 			setstr = ','.join(['{} = {}'.format(field, self._param_placeholder) for field in self.is_dirty()])
@@ -108,16 +107,22 @@ class Mixin(object):
 		query = """
 			INSERT INTO {} ({})
 			VALUES ({})"""
-
+		key = None
 		if not args and not kwargs:
 			print "No args"
 			raise Exception("No args")
 		if not kwargs:
 			query = query.format(cls.table, ",".join(cls.fields), ",".join([cls._param_placeholder]*len(cls.fields)))
 			my_args = list(args)
+			if cls._pk in cls.fields:
+				key = my_args[cls.fields.index(cls.pk)]
 		else:
 			query = query.format(cls.table, ",".join(kwargs.keys()), ",".join([cls._param_placeholder]*len(kwargs.keys())))
 			my_args = list(kwargs.values())
+			if cls._pk in kwargs:
+				key = kwargs[cls._pk]
 		print query, my_args
 		id = cls.sinsert(query,my_args)
+		if key:
+			return cls.get_by_id(key)
 		return cls.get_by_id(id)

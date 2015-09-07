@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name='DRY-orm',
-    version='0.0.57',
+    version='0.0.59',
     author='Jorge Alpedrinha Ramos',
     author_email='jalpedrinharamos@gmail.com',
     packages=find_packages(),
